@@ -12,12 +12,19 @@ class Images_manage extends CI_Controller {
 	
 	
 	
+	
+	
 	public function index() {
 		$data['album_info'] = $this->malbum_manage->get_album();
 		$this->load->view('album_manage/album_main_tpl',$data);
 	}
 	
 	
+	
+	
+	
+	
+
 	
 	function add(){
 		if($_SERVER['REQUEST_METHOD'] == "POST"){
@@ -41,7 +48,6 @@ class Images_manage extends CI_Controller {
 				}
 				$this->mimages_manage->add_image($folder_name, $img_name[$i], $_FILES["images"]["name"][$i]);
 				move_uploaded_file($_FILES["images"]["tmp_name"][$i],"./uploads/".$folder_name."/".$_FILES["images"]["name"][$i]);
-				
 			}
 			redirect('admin_2/images_manage','refresh');
 		}
@@ -60,6 +66,8 @@ class Images_manage extends CI_Controller {
 		$this->malbum_manage->delete_album_by_name_ascii($name_ascii);
 		redirect('admin_2/images_manage','refresh');
 	}
+	
+	
 	
 	
 	 
@@ -88,7 +96,7 @@ class Images_manage extends CI_Controller {
 								die('your files size are two large');
 							} else {
 								if(file_exists($path."/".$images[$i])){
-									$images[$i] = str_replace($images[$j], "(".rand(1,100).")".$images[$i], $images[$i]);
+									$images[$i] = str_replace($images[$i], "(".rand(1,100).")".$images[$i], $images[$i]);
 								}
 								$this->mimages_manage->remove_an_image_by_image_path($path."/".$old_images[$i]->images);                   // Remove the image while the image match image filed is not null.
 								move_uploaded_file($_FILES["images"]["tmp_name"][$i],"./uploads/".$album_name['name']."/".$images[$i]);    // Upload new image to replace old image has been just removed.
@@ -119,6 +127,10 @@ class Images_manage extends CI_Controller {
 		$data['images_info'] = $this->mimages_manage->get_images_match_their_album($name_ascii);
 		$this->load->view('album_manage/album_edit_tpl',$data);
 	}
+	
+	
+	
+	
 	
 	
 	function delete_one_image($id =""){ // delete image in edit form.
