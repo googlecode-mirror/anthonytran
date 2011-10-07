@@ -26,20 +26,24 @@ class Images_manage extends CI_Controller {
 			$img_name = $this->input->post('img_name');
 			$filename = "./uploads/".$folder_name;
 			if(file_exists($filename) && isset($folder_name)){
-				echo"<h1>Folder has already exist!</h1>";
+				$folder_name = str_replace($folder_name, $folder_name."(".rand(1,100).")", $folder_name);
+				mkdir($path.$folder_name);
 			} else {
-				if(!is_dir($path.$folder_name)){  
-					mkdir($path.$folder_name);		// Create a folder.
+				mkdir($path.$folder_name);	// Create a folder.
+			}	
+			
+			$count = count($_FILES['images']['name']);
+			$this->malbum_manage->add_album_info($folder_name,$count);
+			
+			for($i=0; $i< $count; $i++){
+				 if(file_exists($filename."/".$_FILES["images"]["name"][$i])) {
+					$_FILES["images"]["name"][$i] = str_replace($_FILES["images"]["name"][$i],"(".rand(1,100).")".$_FILES["images"]["name"][$i], $_FILES["images"]["name"][$i]);
 				}
-				$count = count($_FILES['images']['name']);
-				$this->malbum_manage->add_album_info($folder_name,$count);
-				for($i=0; $i< $count; $i++){
-					$this->mimages_manage->add_image($folder_name, $img_name[$i], $_FILES["images"]["name"][$i]);
-					move_uploaded_file($_FILES["images"]["tmp_name"][$i],"./uploads/".$folder_name."/" . $_FILES["images"]["name"][$i]);
-				}
-				echo "<h1>Uploading successful</h1>";
-				redirect('admin_2/images_manage','refresh');
+				$this->mimages_manage->add_image($folder_name, $img_name[$i], $_FILES["images"]["name"][$i]);
+				move_uploaded_file($_FILES["images"]["tmp_name"][$i],"./uploads/".$folder_name."/".$_FILES["images"]["name"][$i]);
+				
 			}
+			redirect('admin_2/images_manage','refresh');
 		}
 		$this->load->view('album_manage/album_add_tpl');
 	}
@@ -66,27 +70,32 @@ class Images_manage extends CI_Controller {
 			$images = $_FILES['images']['name'];
 			$size   = $_FILES['images']['size'];
 
-			$id_album = $this->mimages_manage->get_images_info();
-			$old_images = $this->mimages_manage->get_images_info();
+			$id_image = $this->mimages_manage->get_images_info_by_album_name($name_ascii);
+			$old_images = $this->mimages_manage->get_images_info_by_album_name($name_ascii);
 			$album_name = $this->malbum_manage->get_album_name($name_ascii);
 			
 			$album_info = $this->malbum_manage->get_album_info_by_name($name_ascii);
 			
 			$path = "./uploads/".$album_name['name'];
+			
+			
 			$count = count($img_name);
 			if($count == $album_info['amount_images'] ) {
 				for($i=0; $i< $count; $i++){ 
-					if($img_name[$i] != ""){ // Edit images in folder has no changing.
+					if($img_name[$i] != ""){                                                                                               // Edit images in folder has no changing.
 						if(($images[$i]) != "" ){
-							if($size[$i] > 2097152){
+							if($size[$i] > 200000000){
 								die('your files size are two large');
 							} else {
-								$this->mimages_manage->remove_an_image_by_image_path($path."/".$old_images[$i]->images); // Remove the image while the image match image filed is not null.
-								move_uploaded_file($_FILES["images"]["tmp_name"][$i],"./uploads/".$album_name['name']."/" . $images[$i]); // Upload new image to replace old image has been just removed.
-								$this->mimages_manage->update_image_name($id_album[$i]->id, $images[$i]); // Update new name match images field to database.
+								if(file_exists($path."/".$images[$i])){
+									$images[$i] = str_replace($images[$j], "(".rand(1,100).")".$images[$i], $images[$i]);
+								}
+								$this->mimages_manage->remove_an_image_by_image_path($path."/".$old_images[$i]->images);                   // Remove the image while the image match image filed is not null.
+								move_uploaded_file($_FILES["images"]["tmp_name"][$i],"./uploads/".$album_name['name']."/".$images[$i]);    // Upload new image to replace old image has been just removed.
+								$this->mimages_manage->update_image_name($id_image[$i]->id, $images[$i]);                                  // Update new name match images field to database.
 							}
 						}
-						$this->mimages_manage->edit_images_match_their_album($id_album[$i]->id, $img_name[$i]);
+						$this->mimages_manage->edit_images_match_their_album($id_image[$i]->id, $img_name[$i]);
 					} else {
 						die ("Name fields are required.");
 					}
@@ -95,13 +104,14 @@ class Images_manage extends CI_Controller {
 			
 			if($count > $album_info['amount_images']) {
 				for($j = $album_info['amount_images']; $j < $count; $j++ ) {
+					if(file_exists($path."/".$images[$j])){
+						$images[$j] = str_replace($images[$j], "(".rand(1,100).")".$images[$j], $images[$j]);
+					}
 					$this->malbum_manage->update_album_info($name_ascii, $count);
-					$this->mimages_manage->add_image($album_name['name'], $img_name[$j], $images[$j]);  // insert new images into exist table.
-					move_uploaded_file($_FILES["images"]["tmp_name"][$j],"./uploads/".$album_name['name']."/" . $images[$j]);// Upload new image to
+					$this->mimages_manage->add_image($album_name['name'], $img_name[$j], $images[$j]);                                     // insert new images into exist table.
+					move_uploaded_file($_FILES["images"]["tmp_name"][$j],"./uploads/".$album_name['name']."/" . $images[$j]);              // Upload new image to
 				}
-			
 			}
-			
 			redirect('admin_2/images_manage','refresh');
 		}
 		$data['name_ascii'] = $name_ascii;
@@ -116,7 +126,6 @@ class Images_manage extends CI_Controller {
 		$image_info = $this->mimages_manage->get_images_info_by_id($id); // query from DB.
 		$path = "./uploads/".$image_info['album_name']."/".$image_info['images'];
 		$path_folder = "./uploads/".$image_info['album_name'];
-		//echo $path;die('aaa');
 		
 		$this->mimages_manage->remove_an_image_by_image_path($path); // Remove image from folder which hold it.
 		
@@ -124,6 +133,7 @@ class Images_manage extends CI_Controller {
 		
 		$album_info = $this->malbum_manage->get_album_info_by_name($image_info['album_name_ascii']);
 		$count = $album_info['amount_images'];
+		
 		if($count > 1) {
 			$this->malbum_manage->decrease_amount_images_by_name($image_info['album_name'], $count);
 		} else {
@@ -131,8 +141,6 @@ class Images_manage extends CI_Controller {
 			$this->malbum_manage->delete_album_by_name_ascii($image_info['album_name_ascii']);
 			redirect('admin_2/images_manage','refresh');
 		}
-		
-		
 		redirect('admin_2/images_manage/edit_album/'.$image_info['album_name_ascii'],'refresh');
 	}
 	

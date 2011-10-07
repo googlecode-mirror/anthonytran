@@ -15,8 +15,14 @@ class MImages_manage extends CI_Model {
 	}
 
 	
-	function get_images_info(){
+/* 	function get_images_info(){
 		$res = $this->db->get($this->table)->result();
+		return $res;
+	}
+	 */
+	
+	function get_images_info_by_album_name($name_ascii){
+		$res = $this->db->where('album_name_ascii', $name_ascii)->get($this->table)->result();
 		return $res;
 	}
 	
