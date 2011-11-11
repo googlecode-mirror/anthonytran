@@ -29,10 +29,11 @@ class Images_manage extends CI_Controller {
 	function add(){
 		if($_SERVER['REQUEST_METHOD'] == "POST"){
 			$path = "./uploads/";
-			$folder_name = $this->input->post('album_name');
+			$folder_name = ascii_link($this->input->post('album_name'));
 			$img_name = $this->input->post('img_name');
-			$filename = "./uploads/".$folder_name;
-			if(file_exists($filename) && isset($folder_name)){
+			$size     = $_FILES['images']['size'];
+			
+			if(file_exists("./uploads/".$folder_name) && isset($folder_name)){
 				$folder_name = str_replace($folder_name, $folder_name."(".rand(1,100).")", $folder_name);
 				mkdir($path.$folder_name);
 			} else {
@@ -43,11 +44,15 @@ class Images_manage extends CI_Controller {
 			$this->malbum_manage->add_album_info($folder_name,$count);
 			
 			for($i=0; $i< $count; $i++){
-				 if(file_exists($filename."/".$_FILES["images"]["name"][$i])) {
-					$_FILES["images"]["name"][$i] = str_replace($_FILES["images"]["name"][$i],"(".rand(1,100).")".$_FILES["images"]["name"][$i], $_FILES["images"]["name"][$i]);
+				if($size[$i] > 200000000 ){
+					die('Your files size are too large.');
+				} else {
+					if(file_exists("./uploads/".$folder_name."/".$_FILES["images"]["name"][$i])) {
+						$_FILES["images"]["name"][$i] = str_replace($_FILES["images"]["name"][$i],"(".rand(1,100).")".$_FILES["images"]["name"][$i], $_FILES["images"]["name"][$i]);
+					}
+					$this->mimages_manage->add_image($folder_name, $img_name[$i], $_FILES["images"]["name"][$i]);
+					move_uploaded_file($_FILES["images"]["tmp_name"][$i],"./uploads/".$folder_name."/".$_FILES["images"]["name"][$i]);
 				}
-				$this->mimages_manage->add_image($folder_name, $img_name[$i], $_FILES["images"]["name"][$i]);
-				move_uploaded_file($_FILES["images"]["tmp_name"][$i],"./uploads/".$folder_name."/".$_FILES["images"]["name"][$i]);
 			}
 			redirect('admin_2/images_manage','refresh');
 		}
@@ -112,7 +117,7 @@ class Images_manage extends CI_Controller {
 			
 			if($count > $album_info['amount_images']) {
 				for($j = $album_info['amount_images']; $j < $count; $j++ ) {
-					if(file_exists($path."/".$images[$j])){
+					if(file_exists($path."/".$images[$j])) {
 						$images[$j] = str_replace($images[$j], "(".rand(1,100).")".$images[$j], $images[$j]);
 					}
 					$this->malbum_manage->update_album_info($name_ascii, $count);

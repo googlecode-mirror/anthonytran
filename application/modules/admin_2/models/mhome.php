@@ -47,6 +47,7 @@ class MHome extends CI_Model {
 	
 	
 	
+	
 	function count_all_parents_in_cat_table(){
 		$count = $this->db->where('parent_id',0)->count_all_results($this->table) - 1 ;
 		return $count;

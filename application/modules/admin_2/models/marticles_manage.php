@@ -44,7 +44,11 @@ class MArticles_manage extends CI_Model {
 	
 	
 	function get_one_article_by_id($id){
-		$res = $this->db->select('id,name,images,name_ascii,content')->where('status','active')->where('id',$id)->get($this->table)->row_array();
+		$res = $this->db->select('id,name,images,name_ascii,content,categories')
+						->where('status','active')
+						->where('id',$id)
+						->get($this->table)
+						->row_array();
 		return $res;
 	}
 	

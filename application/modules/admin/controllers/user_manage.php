@@ -52,8 +52,6 @@ class User_manage extends CI_Controller {
 			$data['old_user'] = $this->muser_manage->get_one_user_by_id($id);
 			$this->load->view('user_manage/user_edit_tpl',$data);
 		}
-		
-		
 	}
 
 	

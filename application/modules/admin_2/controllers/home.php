@@ -11,8 +11,8 @@ class Home extends CI_Controller {
 	}
 	
 	public function index() {
-		$data['total_rows'] = $this->mhome->count_all_records_in_cat_table();
-		$data['tree'] = $this->mhome->get_tree_cat();
+		$data['total_rows'] 		= 		$this->mhome->count_all_records_in_cat_table();
+		$data['tree'] 				= 		$this->mhome->get_tree_cat();
 		for($i=0;$i<=$data['total_rows'];$i++){
 			$data['count'][$i] = $this->marticles_manage->count_articles_by_its_cat($data['tree'][$i]->id);
 		}
@@ -23,8 +23,8 @@ class Home extends CI_Controller {
 	
 	function add(){
 		echo "Welcome you to ADD FORM.";
-		$data['total_parents'] = $this->mhome->count_all_parents_in_cat_table();
-		$data['parent_info'] = $this->mhome->get_all_parent();
+		$data['total_parents'] 		= 		$this->mhome->count_all_parents_in_cat_table();
+		$data['parent_info'] 		= 		$this->mhome->get_all_parent();
 		if($_SERVER['REQUEST_METHOD'] == "POST"){
 			$action = $this->input->post('action');
 			if($action == 'parent_type'){
@@ -47,8 +47,8 @@ class Home extends CI_Controller {
 	
 	function delete(){
 		echo "Welcome you to DELETE FORM.";
-		$data['total_rows'] = $this->mhome->count_all_records_in_cat_table();
-		$data['show_all_rows'] = $this->mhome->get_tree_cat();
+		$data['total_rows'] 			= 		$this->mhome->count_all_records_in_cat_table();
+		$data['show_all_rows'] 			= 		$this->mhome->get_tree_cat();
 		if($_SERVER['REQUEST_METHOD'] == "POST"){
 			$delete = $this->input->post('delete');
 			for($i=0; $i<= $data['total_rows']; $i++ ){
@@ -71,8 +71,8 @@ class Home extends CI_Controller {
 	
 	function edit(){
 		echo "Welcome you to EDIT FORM.";
-		$data['total_rows'] = $this->mhome->count_all_records_in_cat_table();
-		$data['show_all_rows'] = $this->mhome->get_tree_cat();
+		$data['total_rows'] 			= 		$this->mhome->count_all_records_in_cat_table();
+		$data['show_all_rows'] 			= 		$this->mhome->get_tree_cat();
 		if($_SERVER['REQUEST_METHOD'] == "POST"){
 			$edit = $this->input->post('edit');
 			for($i=0; $i<= $data['total_rows']; $i++){

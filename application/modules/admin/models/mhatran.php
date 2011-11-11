@@ -15,20 +15,17 @@ class MHatran extends CI_Model {
 	 * Start - login() truy van username va pass trong DB
 	 * -----------------------------------------------------*/
 	function login($user, $pass) {
-
-		$this->db->select('id,name,password,email');
-		$this->db->where('status', 'active');
-		$this->db->where('name', $user);
-		$this->db->where('password', $pass);
-		$this->db->limit(1);
-		$Q = $this->db->get('users');
-
-		$result = $Q->row_array();
-
+		$result 						= 		$this->db->select('id,name,password,email')
+											 			 ->where('status', 'active')
+											 			 ->where('name', $user)
+											 			 ->where('password', $pass)
+											 			 ->limit(1)->get('users')
+											 			 ->row_array();
+		
 		if(isset($result['id']) && $result['id'] > 0){
-			$_SESSION['_admin'] = $result['id'];
-			$_SESSION['username'] = $result['name']; 
-			return true;
+			$_SESSION['_admin'] 		= 		$result['id'];
+			$_SESSION['username'] 		= 		$result['name']; 
+			return true;	
 		} else {
 			return false;
 		}

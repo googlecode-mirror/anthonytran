@@ -41,10 +41,8 @@ class Hatran extends CI_Controller {
 			
 			$r = $this->mhatran->login($user, $pass);
 			if(!$r){
-
 				redirect('tony_admin/login','refresh');
 			} else {
-				//die($r);
 				redirect('tony_admin/home','refresh');
 			}
 		}

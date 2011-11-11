@@ -22,7 +22,8 @@ class MImages_manage extends CI_Model {
 	 */
 	
 	function get_images_info_by_album_name($name_ascii){
-		$res = $this->db->where('album_name_ascii', $name_ascii)->get($this->table)->result();
+		$res = $this->db->where('album_name_ascii', $name_ascii)
+						->get($this->table)->result();
 		return $res;
 	}
 	
@@ -42,7 +43,8 @@ class MImages_manage extends CI_Model {
 	
 	
 	function delete_images_match_its_album($name_ascii){
-		$res = $this->db->where('album_name_ascii', $name_ascii)->delete($this->table);
+		$res = $this->db->where('album_name_ascii', $name_ascii)
+						->delete($this->table);
 		return true;
 	}
 	
@@ -74,7 +76,9 @@ class MImages_manage extends CI_Model {
 	
 	
 	function get_images_match_their_album($name_ascii){
-		$res = $this->db->where('album_name_ascii', $name_ascii)->get($this->table)->result();
+		$res = $this->db->where('album_name_ascii', $name_ascii)
+						->get($this->table)
+						->result();
 		return $res;
 	}
 	
@@ -84,7 +88,8 @@ class MImages_manage extends CI_Model {
 		$arr = array(
 						'name' => $img_name
 					);
-		$this->db->where('id',$id_album)->update($this->table, $arr);
+		$this->db->where('id',$id_album)
+				 ->update($this->table, $arr);
 	}
 	
 	
@@ -93,20 +98,24 @@ class MImages_manage extends CI_Model {
 		$arr = array(
 						'images' => $images
 					);
-		$this->db->where('id', $id_album)->update($this->table, $arr);
+		$this->db->where('id', $id_album)
+				 ->update($this->table, $arr);
 	}
 	
 	
 	
 	
 	function get_images_info_by_id($id){
-		$res = $this->db->where('id', $id)->get($this->table)->row_array();
+		$res = $this->db->where('id', $id)
+						->get($this->table)
+						->row_array();
 		return $res;
 	}
 	
 	
 	function delete_one_image_by_id($id){
-		$res = $this->db->where('id', $id)->delete($this->table);
+		$res = $this->db->where('id', $id)
+						->delete($this->table);
 		return true;
 	}
 	

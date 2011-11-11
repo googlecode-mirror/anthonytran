@@ -15,9 +15,9 @@
 			Categories : <select name = "categories[]" MULTIPLE SIZE = 4>
 							<?php for($i= 0; $i <= $total_rows; $i++) {?>
 								<?php if($cat_info[$i]->parent_id == 0) {?>
-									<option value ="<?php echo $cat_info[$i]->id;?>"><?php echo $cat_info[$i]->name;?></option>
+									<option value ="<?php echo $cat_info[$i]->id;?>" <?php for($j=1; $j<= $number_of_categories; $j++){if($selected[$j] == $cat_info[$i]->id ){ echo "selected";}} ?> ><?php echo $cat_info[$i]->name;?></option>
 								<?php } else { ?>
-									<option value ="<?php echo $cat_info[$i]->id;?>">---<?php echo $cat_info[$i]->name;?></option>
+									<option value ="<?php echo $cat_info[$i]->id;?>" <?php for($j=1; $j<= $number_of_categories; $j++){if($selected[$j] == $cat_info[$i]->id ){ echo "selected";}} ?> >---<?php echo $cat_info[$i]->name;?></option>
 								<?php } ?>
 							<?php } ?>
 						</select><br>

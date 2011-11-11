@@ -13,9 +13,9 @@
 			<div id = "another">
 				<ul>
 					<li>Album Name: <input type="text" value="" name="album_name" /> </li>
-					<li>Name: <input type="text"  name="img_name[]" value="" />  <input type="file" value = "" name="images[]" size="10" /></li>
-					<li>Name: <input type="text"  name="img_name[]" value="" />  <input type="file" value = "" name="images[]" size="10" /></li>
-					<li>Name: <input type="text"  name="img_name[]" value="" />  <input type="file" value = "" name="images[]" size="10" /></li>
+					<li>Name: <input type="text"  name="img_name[]" value="" size="10" />  <input type="file" value = "" name="images[]" size="10" /></li>
+					<li>Name: <input type="text"  name="img_name[]" value="" size="10" />  <input type="file" value = "" name="images[]" size="10" /></li>
+					<li>Name: <input type="text"  name="img_name[]" value="" size="10" />  <input type="file" value = "" name="images[]" size="10" /></li>
 					<li id = "add_more"><a href = "javascript:void(0)" onclick = "add_more_image();">Add more</a></li>
 					<li><input type="submit" value="Upload" name="save"/></li>
 				</ul>
